@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Healthy Living Hub</title>
+  
+  <!-- Google Fonts for Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- ====================================================
+       CSS Styles Section
+       ==================================================== -->
+  <style>
+    /* --------------------------------
+       CSS Variables and Base Settings
+    -------------------------------- */
+    :root {
+      --primary-color: #a8d0e6;
+      --secondary-color: #8bb8d0;
+      --bg-gradient-start: #f0f4ff;
+      --bg-gradient-end: #d0e6ff;
+      --text-color: #333;
+      --modal-bg: rgba(0, 0, 0, 0.8);
+      --bubble-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --transition-duration: 0.3s;
+    }
+
+    /* --------------------------------
+       Reset & Base Styles
+    -------------------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    /* --------------------------------
+       Header Styles
+    -------------------------------- */
+    header {
+      padding: 20px;
+      text-align: center;
+      background-color: var(--primary-color);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header .site-logo {
+      max-width: 150px;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-family: 'Roboto Slab', serif;
+    }
+
+    /* --------------------------------
+       Sticky Navigation Styles
+    -------------------------------- */
+    nav {
+      background: #f9f9f9;
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    nav ul li {
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background var(--transition-duration), transform var(--transition-duration);
+    }
+    nav ul li:hover,
+    nav ul li.active {
+      background: var(--primary-color);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    /* --------------------------------
+       Main Content and Page Styles
+    -------------------------------- */
+    main {
+      padding: 20px;
+    }
+    .page {
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .page.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* --------------------------------
+       Slideshow Styles with Fade Effects
+    -------------------------------- */
+    #slideshow {
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: var(--bubble-shadow);
+      height: 400px; /* Adjust as needed */
+    }
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+    /* Ensuring the full image is visible */
+    #slideshow .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* --------------------------------
+       Bubble Styles (for content and slideshow)
+    -------------------------------- */
+    .bubble {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--bubble-shadow);
+    }
+
+    /* --------------------------------
+       Home Container Styles (Page 1 Layout)
+    -------------------------------- */
+    .home-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      max-width: 1000px;
+      margin: 20px auto;
+    }
+    @media (min-width: 768px) {
+      .home-container {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .welcome-bubble, .slideshow-bubble {
+        flex: 1;
+        margin: 10px;
+      }
+    }
+
+    /* --------------------------------
+       Additional Content Container Styles (for other pages)
+    -------------------------------- */
+    .content-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-top: 20px;
+    }
+    @media (max-width: 768px) {
+      .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* --------------------------------
+       Image Box and Thumbnail Styles
+    -------------------------------- */
+    .img-box {
+      background: #fff;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform var(--transition-duration);
+    }
+    .img-box:hover {
+      transform: scale(1.05);
+    }
+    .img-box.left {
+      animation: slideInLeft 0.5s ease-out forwards;
+    }
+    .img-box.right {
+      animation: slideInRight 0.5s ease-out forwards;
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    /* --------------------------------
+       Modal Styles for Enlarged Images
+    -------------------------------- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--modal-bg);
+      justify-content: center;
+      align-items: center;
+      animation: fadeInModal 0.3s ease-out;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color var(--transition-duration);
+    }
+    .close:hover {
+      color: #bbb;
+    }
+
+    /* --------------------------------
+       Return to Top Button Styles
+    -------------------------------- */
+    #topBtn {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      z-index: 300;
+      font-size: 18px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity var(--transition-duration);
+    }
+    #topBtn.show {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Image and Video */
+    img, iframe {
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+  </style>
+  <!-- End of CSS Styles Section -->
+</head>
+<body>
+  <!-- ====================================================
+       HTML Header Section
+       ==================================================== -->
+  <header>
+    <img 
+      src="C:/Users/Galaxy/OneDrive - Fife College/Desktop/HTML Shell - College project/project.png" 
+      alt="Healthy Living and Mental Health - Fife Council" 
+      class="site-logo"
+    />
+    <h1>Healthy Living Hub</h1>
+  </header>
+
+  <!-- ====================================================
+       HTML Navigation Section
+       ==================================================== -->
+  <nav>
+    <ul>
+      <li class="active" onclick="showPage('page1', this)">Home</li>
+      <li onclick="showPage('page2', this)">About</li>
+      <li onclick="showPage('page3', this)">Nutrition</li>
+      <li onclick="showPage('page4', this)">Fitness</li>
+      <li onclick="showPage('page5', this)">Mindfulness</li>
+      <li onclick="showPage('page6', this)">Community</li>
+      <li onclick="showPage('page7', this)">Products</li>
+      <li onclick="showPage('page8', this)">Outing Recommendations</li>
+    </ul>
+  </nav>
+
+  <!-- ====================================================
+       HTML Main Content Section (Pages)
+       ==================================================== -->
+  <main>
+    <!-- -------------------------------------------------
+         Page 1: Home
+         Contains the Welcome content and revamped Slideshow (inside bubbles)
+         ------------------------------------------------- -->
+    <section id="page1" class="page active">
+      <div class="home-container">
+        <!-- Welcome Bubble -->
+        <div class="welcome-bubble bubble">
+          <h2>Welcome to Healthy Living</h2>
+          <p>Welcome to Healthy Living Hub – your gateway to a vibrant, energetic, and fulfilling life! Here, we celebrate the art of living well, empowering you to nurture your body, mind, and spirit. Embrace the journey of transforming your lifestyle, as every small change leads to a cascade of positive effects that brighten your day and energize your life.</p>
+          <p>Our mission is to inspire, motivate, and guide you through a holistic approach to wellness that encompasses balanced nutrition, regular exercise, mindfulness, and meaningful connections. Begin your journey to a healthier, happier you, where every day is an opportunity to grow, transform, and live life to the fullest.</p>
+          <p>Step into a world where wellness isn’t just a goal—it’s a lifestyle, a passion, and a commitment to living each day with purpose and joy.</p>
+        </div>
+        <!-- Revamped Slideshow Bubble -->
+        <div class="slideshow-bubble bubble">
+          <div id="slideshow">
+            <!-- Existing Slides -->
+            <div class="slide active">
+              <img src="file:///C:/Users/Galaxy/Documents/images/jogging_in_park.jpg" alt="Healthy Living: Jogging in Park" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/holistic_collage.jpg" alt="Healthy Living: Holistic Collage" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/meditation_scene.jpg" alt="Healthy Living: Meditation Scene" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/nutritious_meal.jpg" alt="Healthy Living: Nutritious Meal" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_scenic_meadow_with_rolling_hills,_where_people_a.jpg" alt="Scenic Meadow with Rolling Hills" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_picturesque_canoe_ride_over_a_beautiful_lake,_wi.jpg" alt="Picturesque Canoe Ride over a Beautiful Lake" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_breathtaking_meditation_center_perched_atop_a_hi.jpg" alt="Breathtaking Meditation Center atop a Hill" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_serene_nature_trail_with_lush_greenery,_where_a_.jpg" alt="Serene Nature Trail with Lush Greenery" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_charming_wooden_cabin_in_a_forest_clearing,_with.jpg" alt="Charming Wooden Cabin in a Forest Clearing" />
+            </div>
+            <!-- Additional New Slides -->
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/An_inspiring_outdoor_workout_scene_in_a_park_with_.jpg" alt="Inspiring Outdoor Workout Scene in a Park" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_beautifully_arranged_meal_prep_with_colorful,_nu (1).jpg" alt="Beautifully Arranged Meal Prep with Colorful Nutrition" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_calming_spa-like_setting_with_candles,_essential.jpg" alt="Calming Spa-like Setting with Candles and Essentials" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_cozy_and_inviting_home_garden_with_fresh_herbs,_.jpg" alt="Cozy and Inviting Home Garden with Fresh Herbs" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_family_enjoying_a_picnic_in_a_green_park,_surrou (1).jpg" alt="Family Enjoying a Picnic in a Green Park" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_minimalist_and_aesthetically_pleasing_kitchen_wi.jpg" alt="Minimalist and Aesthetically Pleasing Kitchen" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_peaceful_yoga_session_at_sunrise_on_a_beach,_wit.jpg" alt="Peaceful Yoga Session at Sunrise on a Beach" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_refreshing_smoothie_bowl_topped_with_berries,_nu.jpg" alt="Refreshing Smoothie Bowl Topped with Berries" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_scenic_hiking_trail_in_the_mountains,_where_a_gr (1).jpg" alt="Scenic Hiking Trail in the Mountains" />
+            </div>
+            <div class="slide">
+              <img src="file:///C:/Users/Galaxy/Documents/images/A_vibrant_and_colorful_display_of_fresh_fruits_and.jpg" alt="Vibrant and Colorful Display of Fresh Fruits and Vegetables" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------
+         Page 2: About Healthy Living
+         ------------------------------------------------- -->
+    <section id="page2" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+          <img src="file:///C:/Users/Galaxy/Documents/images/healthy_living.jpg" alt="About Healthy Living" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/healthy_living.jpg" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>About Healthy Living</h2>
+          <p>Healthy living is a transformative journey—a path that empowers you to create a balanced and fulfilling life. It’s about embracing a lifestyle that prioritizes nourishment, movement, mindfulness, and community. In a fast-paced world, taking the time to care for your well-being is a radical act of self-love and resilience.</p>
+          <p>We believe that every choice you make—from the food you eat to the way you move and connect—shapes your destiny. Our mission is to provide you with the inspiration, resources, and community support necessary to embark on this journey with confidence and passion.</p>
+          <p>Discover how cultivating healthy habits can lead to extraordinary transformations in your energy, clarity, and overall happiness. Your journey to wellness is unique, and here, every step is celebrated as a victory over stress, fatigue, and the chaos of everyday life.</p>
+        </div>
+        <div class="img-box right">
+          <img src="file:///C:/Users/Galaxy/Documents/images/healthy_life.jpg" alt="Healthy Life" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/healthy_life.jpg" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------
+         Page 3: Nutrition for Life
+         ------------------------------------------------- -->
+    <section id="page3" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+          <img src="file:///C:/Users/Galaxy/Documents/images/nutrition.jpg" alt="Nutrition" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/nutrition.jpg" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>Nutrition for Life</h2>
+          <p>Nutrition is the cornerstone of a vibrant and healthy life. Every meal you consume is an opportunity to fuel your body with the energy and nutrients it needs to flourish. Imagine a plate brimming with colorful fruits, crisp vegetables, whole grains, and lean proteins—each element playing a vital role in empowering your cells and igniting your vitality.</p>
+          <p>We champion a mindful approach to eating, where every bite is savored and every ingredient is appreciated for its nourishing power. Learn how to transform your meals into a celebration of life, health, and well-being, while gaining insights into how balanced nutrition can enhance your energy, boost your immune system, and support overall longevity.</p>
+          <p>Let your plate be a canvas for creativity and wellness—a place where nutrition and taste merge to form the foundation of a dynamic, joyful life.</p>
+        </div>
+        <div class="img-box right">
+          <img src="file:///C:/Users/Galaxy/Documents/images/healthy_meals.jpg" alt="Healthy Meals" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/healthy_meals.jpg" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------
+         Page 4: Fitness & Exercise
+         ------------------------------------------------- -->
+    <section id="page4" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+          <img src="file:///C:/Users/Galaxy/Documents/images/fitness.jpg" alt="Fitness" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/fitness.jpg" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>Fitness & Exercise</h2>
+          <p>Fitness is a celebration of your body's incredible potential. It’s not just about sculpting a lean physique—it’s about harnessing strength, resilience, and the joy of movement. Every workout is a powerful reminder that you are capable of extraordinary feats, both physically and mentally.</p>
+          <p>Whether you’re running through nature’s trails, practicing yoga in serene settings, or lifting weights in a bustling gym, each exercise routine ignites your energy and builds endurance. Embrace fitness as an empowering ritual that rejuvenates your body, alleviates stress, and sharpens your focus.</p>
+          <p>Let each session inspire you to break boundaries, push past your limits, and discover new dimensions of strength and determination. Every drop of sweat is a step toward a more confident, dynamic, and fulfilling life.</p>
+        </div>
+        <div class="img-box right">
+          <img src="file:///C:/Users/Galaxy/Documents/images/active_life.jpg" alt="Active Life" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/active_life.jpg" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------
+         Page 5: Mindfulness & Wellbeing
+         ------------------------------------------------- -->
+    <section id="page5" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+          <img src="file:///C:/Users/Galaxy/Documents/images/mindfulness.jpg" alt="Mindfulness" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/mindfulness.jpg" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>Mindfulness & Wellbeing</h2>
+          <p>Mindfulness is the art of truly living in the moment—of letting go of the past and not worrying about the future. It’s a practice that invites you to slow down, breathe deeply, and become aware of the beauty in every instant. In a world that constantly competes for your attention, mindfulness offers a sanctuary for your mind and soul.</p>
+          <p>By cultivating practices such as meditation, mindful breathing, and reflective journaling, you can reduce stress, alleviate anxiety, and create space for genuine inner peace. This mindful approach transforms ordinary moments into profound experiences and empowers you to navigate life with clarity and calm.</p>
+          <p>Embrace mindfulness as your daily ritual, and let its transformative power guide you toward a life filled with balance, serenity, and profound self-awareness.</p>
+        </div>
+        <div class="img-box right">
+          <img src="file:///C:/Users/Galaxy/Documents/images/calm.jpg" alt="Calm" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/calm.jpg" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------
+         Page 6: Community & Success Stories
+         ------------------------------------------------- -->
+    <section id="page6" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+          <img src="file:///C:/Users/Galaxy/Documents/images/community.jpg" alt="Community" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/community.jpg" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>Community & Success Stories</h2>
+          <p>Community is the heartbeat of a truly healthy lifestyle. Our community is a vibrant mosaic of individuals, each on their own unique journey towards wellness. Here, every story of transformation is celebrated, and every challenge overcome is a testament to the power of collective inspiration.</p>
+          <p>When you join our community, you become part of a supportive network that uplifts, motivates, and champions your success. Share your triumphs, learn from others, and discover that together we can achieve far more than we ever could alone.</p>
+          <p>Let the inspiring journeys of others fuel your own path to greatness, and in turn, become a beacon of hope and motivation for those around you. In this space, every victory is shared, and every step forward is a celebration of life itself.</p>
+        </div>
+        <div class="img-box right">
+          <img src="file:///C:/Users/Galaxy/Documents/images/inspiration.jpg" alt="Inspiration" class="thumb" data-large="file:///C:/Users/Galaxy/Documents/images/inspiration.jpg" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+<!-- -------------------------------------------------
+         Page 7: Products that we Suggest
+         ------------------------------------------------- -->
+    <section id="page7" class="page">
+      <div class="content-container">
+        <div class="img-box left">
+         <img src="C:\Users\Galaxy\OneDrive - Fife College\Desktop\HTML Shell - College project\nutrition.webp" alt="Products" class="thumb" data-large="" loading="lazy" />
+        </div>
+        <div class="bubble">
+          <h2>Product Suggestions</h2>
+          <p>Thinking of changing your diet? Don't worry, we can help! You can find a helpful variety of nutritional foods and substances that can help balance your wellbeing! But please remember that these are not a substitute for actual food, these are to be taken in addition to a healthy stable diet.</p>
+        </div>
+        <div class="img-box right">
+          <img src="C:\Users\Galaxy\OneDrive - Fife College\Desktop\HTML Shell - College project\nutrition2.jpeg" alt="Products" class="thumb" data-large="" loading="lazy" />
+        </div>
+      </div>
+    </section>
+  
+
+<!-- -------------------------------------------------
+         Page 8: Outdoor Activity recommendations
+         ------------------------------------------------- -->
+
+    <section id="page8" class="page">
+      <div class="content-container">
+       <div class="bubble">
+        <h2>Exploring the Outdoors</h2>
+        <p><b>Below you'll find a video of a walk from Craigmead to West Lothian Summit</p></b>
+       </div> 
+        <iframe width="275%" height="355" src="https://www.youtube.com/embed/gAgxsqAjQH8?si=iwDNMuB6ExsbB6hL" 
+                title="YouTube video player" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+      </div>
+    </section>
+  </main>
+    
+
+  <!-- ====================================================
+       HTML: Return to Top Button
+       ==================================================== -->
+  <button id="topBtn" aria-label="Return to Top">Top</button>
+
+  <!-- ====================================================
+       HTML: Modal for Enlarged Images
+       ==================================================== -->
+  <div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalImage">
+    <span class="close" aria-label="Close modal" onclick="closeModal(event)">&times;</span>
+    <img class="modal-content" id="modalImage" alt="Enlarged view" />
+  </div>
+
+  <!-- ====================================================
+       JavaScript Section
+       ==================================================== -->
+  <script>
+    // --------------------------------
+    // Page Navigation Functionality
+    // --------------------------------
+    const showPage = (pageId, element) => {
+      document.querySelectorAll('nav ul li').forEach(navItem => navItem.classList.remove('active'));
+      element.classList.add('active');
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const selectedPage = document.getElementById(pageId);
+      if (selectedPage) selectedPage.classList.add('active');
+    };
+
+    // --------------------------------
+    // Auto Slideshow Functionality with Fade Effect
+    // --------------------------------
+    let slideIndex = 0;
+    const slides = document.getElementsByClassName("slide");
+
+    const showNextSlide = () => {
+      // Hide all slides
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove("active");
+      }
+      // Increment the slide index
+      slideIndex = (slideIndex + 1) % slides.length;
+      // Show the next slide with fade effect
+      slides[slideIndex].classList.add("active");
+    };
+
+    // Automatically change slide every 4 seconds
+    setInterval(showNextSlide, 4000);
+
+    // --------------------------------
+    // Return to Top Button Functionality
+    // --------------------------------
+    const topBtn = document.getElementById("topBtn");
+    window.addEventListener('scroll', () => {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        topBtn.classList.add('show');
+      } else {
+        topBtn.classList.remove('show');
+      }
+    });
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // --------------------------------
+    // Modal Functionality for Enlarged Images
+    // --------------------------------
+    const openModal = imgElement => {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modalImg.src = imgElement.dataset.large || imgElement.src;
+      modal.style.display = 'flex';
+    };
+
+    const closeModal = event => {
+      if (event && event.target.id === 'modalImage') return;
+      document.getElementById('imageModal').style.display = 'none';
+    };
+
+    // Add click event listeners to thumbnail images for modal functionality
+    document.querySelectorAll('.thumb').forEach(img => {
+      img.addEventListener('click', e => {
+        e.stopPropagation();
+        openModal(img);
+      });
+    });
+  </script>
+  <!-- End of JavaScript Section -->
+</body>
+</html>
